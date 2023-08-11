@@ -1,0 +1,59 @@
+package com.example.controllers;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.except.UserNotFoundException;
+import com.example.model.LoginRequest;
+import com.example.model.Student;
+import com.example.service.StudentService;
+
+@RestController
+@RequestMapping("/student")
+public class StudentController {
+
+	@Autowired
+	StudentService studentService;
+
+	@PostMapping("/studentReg")
+	public Map<String,Object> StudentReg(@RequestBody Student student) {
+	 return	studentService.registration(student);
+		
+	}
+
+	@GetMapping("/getAllStudents")
+	public List StudentData() {
+		return studentService.fullData();
+	}
+
+	@PostMapping("/studentLog")
+	public Map<String,Object> StudentLogin(@RequestBody LoginRequest loginRequest) throws UserNotFoundException{
+		return studentService.login(loginRequest);
+
+	}
+
+	@GetMapping("studentById/{studentId}")
+	public List StudentById(@PathVariable String studentId) {
+		return studentService.StudentById(studentId);
+
+	}
+
+	@PutMapping("studentUpdatePassword/{studentId}/{password}")
+	public String passwordUpdate(@PathVariable String studentId, @PathVariable String password) {
+		int i = studentService.passwordUpdate(studentId, password);
+		if (i > 0) {
+			return "password updated";
+		} else {
+			return "password not updated";
+		}
+	}
+}

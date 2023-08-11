@@ -1,0 +1,44 @@
+
+.Home-page{
+    display: flex;
+    justify-content: center;
+    background-image: url("https://img.freepik.com/free-photo/book-composition_23-2147690525.jpg");
+    height: 700px;
+    width: 1300px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    margin-top: auto;
+}
+.text{
+  margin-top: 300px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 40px;
+  color: rgb(56, 51, 51);
+  text-shadow: 2px 2px  black;
+}
+    .btn1 {  
+        position: absolute;
+        left: 520px;
+        margin-top: 400px;      
+        margin-bottom: auto;
+      }
+      .btn2 {
+        position: absolute;
+        right: 520px;
+        margin-top: 400px;
+        margin-bottom: auto;
+      }
+      button{
+        background-color: #a6f77b;
+        padding: 10px;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: medium;
+      }
+      button:hover {
+        background-color: hsla(133, 77%, 21%, 0.336);
+      }
+

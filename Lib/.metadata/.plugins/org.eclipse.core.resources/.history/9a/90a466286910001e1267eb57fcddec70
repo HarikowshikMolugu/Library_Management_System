@@ -1,0 +1,273 @@
+package com.example.service.impl;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+
+import com.example.enu.Branch;
+import com.example.enu.Gender;
+import com.example.enu.UniversityNames;
+import com.example.enu.YearOfStudy;
+import com.example.except.UserNotFoundException;
+import com.example.model.LoginRequest;
+import com.example.model.Student;
+import com.example.service.StudentService;
+
+@Service
+public class StudentServiceImplementation implements StudentService {
+	@Autowired
+	JdbcTemplate jdbc;
+
+	public Map<String, Object> registration(Student student) {
+		Map<String, Object> response = new HashMap<>();
+
+		if (student == null) {
+			response.put("Status", false);
+			response.put("Message", "Student object cannot be null");
+			return response;
+		}
+
+		String rollNumber = student.getRollNumber();
+		String selectQuery = "select count(*) from students where roll_number = ?";
+		int count = jdbc.queryForObject(selectQuery, new Object[] { rollNumber }, Integer.class);
+		if (count > 0) {
+			response.put("Status", false);
+			response.put("Message", "Student with roll number " + rollNumber + " already exists");
+			return response;
+		}
+
+		String firstName = student.getFirstName();
+		String lastName = student.getLastName();
+		if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()) {
+			response.put("Status", false);
+			response.put("Message", "First name and last name cannot be null or empty");
+			return response;
+		}
+
+		Gender gender = student.getGender();
+		if (gender == null) {
+			response.put("Status", false);
+			response.put("Message", "Gender cannot be null");
+			return response;
+		}
+
+		UniversityNames universityName = student.getUniversityName();
+		if (universityName == null) {
+			response.put("Status", false);
+			response.put("Message", "University name cannot be null");
+			return response;
+		}
+
+		Date yearOfJoin = student.getYearOfJoin();
+		Date passOutYear = student.getPassOutYear();
+		if (yearOfJoin == null || passOutYear == null || yearOfJoin.after(passOutYear)) {
+			response.put("Status", false);
+			response.put("Message", "Invalid year of join or pass out year");
+			return response;
+		}
+
+		String password = student.getPassword();
+		if (password == null || password.length() < 8 || password.matches("[a-zA-Z]+") || password.matches("\\d+")
+				|| password.matches("[^a-zA-Z0-9]+") || password.contains("123") || password.contains("345")
+				|| password.contains("678")) {
+			response.put("Status", false);
+			response.put("Message",
+					"Password must contain at least 8 characters with at least one uppercase letter, one lowercase letter, one special character, and must not contain the series 123, 345, 678");
+			return response;
+		}
+		String phoneNumber = student.getPhoneNumber();
+		if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
+			response.put("Status", false);
+			response.put("Message", "Invalid phone number");
+			return response;
+		}
+
+		String email = student.getEmail();
+		if (email == null || !email.matches("\\w+@[a-z]+\\.[a-z]{2,3}")) {
+			response.put("Status", false);
+			response.put("Message", "Invalid email address");
+			return response;
+		}
+
+		YearOfStudy yearOfStudy = student.getYearOfStudy();
+		if (yearOfStudy == null) {
+			response.put("Status", false);
+			response.put("Message", "Year of study cannot be null");
+			return response;
+		}
+
+		Branch branch = student.getBranch();
+		if (branch == null) {
+			response.put("Status", false);
+			response.put("Message", "Branch cannot be null");
+			return response;
+		}
+
+		String insertQuery = "insert into students(roll_number,first_name,last_name,gender,start_study_date,end_study_date,branch,password,student_phone_number,student_email,student_yearof_study,university_name) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+		int i = jdbc.update(insertQuery, rollNumber, firstName, lastName, gender.toString(), yearOfJoin, passOutYear,
+				branch.toString(), password, phoneNumber, email, yearOfStudy.toString(), universityName.toString());
+		if (i > 0) {
+			response.put("Status", true);
+			response.put("Message", "User registered successfully");
+		} else {
+			response.put("Status", false);
+			response.put("Message", "Unable to register user");
+		}
+
+		return response;
+	}
+
+	/*
+	 * public Map<String, Object> registration(Student student) throws
+	 * IllegalArgumentException {
+	 * 
+	 * Map<String, Object> response = new HashMap<>(); if (student == null) { throw
+	 * new IllegalArgumentException("Student object cannot be null"); } String
+	 * roll_number = student.getRollNumber(); if (roll_number == null ||
+	 * roll_number.isEmpty()) { throw new
+	 * IllegalArgumentException("Roll number cannot be null or empty"); } String
+	 * firstName = student.getFirstName(); String lastName = student.getLastName();
+	 * if (firstName == null || firstName.isEmpty() || lastName == null ||
+	 * lastName.isEmpty()) { throw new
+	 * IllegalArgumentException("First name and last name cannot be null or empty");
+	 * } Gender gender = student.getGender(); if (gender == null) { throw new
+	 * IllegalArgumentException("Gender cannot be null"); } UniversityNames
+	 * universityName = student.getUniversityName(); if (universityName == null) {
+	 * throw new IllegalArgumentException("University name cannot be null"); } Date
+	 * yearOfJoin = student.getYearOfJoin(); Date passOutYear =
+	 * student.getPassOutYear(); if (yearOfJoin == null || passOutYear == null ||
+	 * yearOfJoin.after(passOutYear)) { throw new
+	 * IllegalArgumentException("Invalid year of join or pass out year"); } String
+	 * password = student.getPassword(); if (password == null || password.isEmpty())
+	 * { throw new IllegalArgumentException("Password cannot be null or empty"); }
+	 * String phoneNumber = student.getPhoneNumber(); if (phoneNumber == null ||
+	 * !phoneNumber.matches("\\d{10}")) { throw new
+	 * IllegalArgumentException("Invalid phone number"); } String email =
+	 * student.getEmail(); if (email == null || !email.matches("\\w+@\\w+\\.\\w+"))
+	 * { throw new IllegalArgumentException("Invalid email"); } YearOfStudy
+	 * yearOfStudy = student.getYearOfStudy(); if (yearOfStudy == null) { throw new
+	 * IllegalArgumentException("Year of study cannot be null"); } Branch branch =
+	 * student.getBranch(); if (branch == null) { throw new
+	 * IllegalArgumentException("Branch cannot be null"); } String insertQuery =
+	 * "insert into students(roll_number,first_name,last_name,gender,start_study_date,end_study_date,branch,password,student_phone_number,student_email,student_yearof_study,university_name) values (?,?,?,?,?,?,?,?,?,?,?,?)"
+	 * ; int i = jdbc.update(insertQuery, roll_number, firstName, lastName,
+	 * gender.toString(), yearOfJoin, passOutYear, branch.toString(), password,
+	 * phoneNumber, email, yearOfStudy.toString(), universityName.toString()); if (i
+	 * > 0) { response.put("Status", true); response.put("Message",
+	 * "User registered successfully"); } else { response.put("Status", false);
+	 * response.put("Message", "Unable to register user"); } return response; }
+	 */
+
+	public Map<String, Object> login(LoginRequest loginRequest) {
+	    Map<String, Object> res = new HashMap<>();
+	    try {
+	        if (loginRequest == null || loginRequest.getRollNumber() == null || loginRequest.getPassword() == null) {
+	            res.put("status", false);
+	            res.put("message", "Invalid credentials");
+	            return res;
+	        }
+
+	        String sql = "select * from students where roll_number=? and password=?";
+	        List<Map<String, Object>> data = jdbc.queryForList(sql, loginRequest.getRollNumber(),
+	                loginRequest.getPassword());
+
+	        if (data != null && !data.isEmpty()) {
+	            Map<String, Object> studentData = data.get(0);
+	            Student student = new Student();
+	            student.setId((Integer) studentData.get("id"));
+	            student.setRollNumber((String) studentData.get("roll_number"));
+	            student.setFirstName((String) studentData.get("first_name"));
+	            student.setLastName((String) studentData.get("last_name"));
+	            student.setGender(Gender.valueOf((String) studentData.get("gender")));
+	            student.setUniversityName(UniversityNames.valueOf((String) studentData.get("university_name")));
+	            student.setYearOfJoin((Date) studentData.get("start_study_date"));
+	            student.setPassOutYear((Date) studentData.get("end_study_date"));
+	            student.setPassword((String) studentData.get("password"));
+	            student.setPhoneNumber((String) studentData.get("student_phone_number"));
+	            student.setEmail((String) studentData.get("student_email"));
+	            student.setYearOfStudy(YearOfStudy.valueOf((String) studentData.get("student_yearof_study")));
+	            student.setBranch(Branch.valueOf((String) studentData.get("branch")));
+	            res.put("status", true);
+	            res.put("data", student);
+	        } else {
+	            res.put("status", false);
+	            res.put("message", "User not found");
+	        }
+	    } catch (Exception e) {
+	        res.put("status", false);
+	        res.put("message", "Error occurred: " + e.getMessage());
+	    }
+	    return res;
+	}
+
+	/*
+	 * public Map<String,Object> login(LoginRequest loginRequest) throws
+	 * UserNotFoundException { Map<String,Object> res=new HashMap(); if
+	 * (loginRequest != null) {
+	 * 
+	 * String sql = "select * from students where roll_number=? and password=?";
+	 * List<Map<String, Object>> data = jdbc.queryForList(sql,
+	 * loginRequest.getStudentId(), loginRequest.getPassword());
+	 * 
+	 * if (data != null && !data.isEmpty()) { Map<String, Object> studentData =
+	 * data.get(0); Student student = new Student(); student.setId((Long)
+	 * studentData.get("id")); student.setRollNumber((String)
+	 * studentData.get("roll_number")); student.setFirstName((String)
+	 * studentData.get("first_name")); student.setLastName((String)
+	 * studentData.get("last_name")); student.setGender(Gender.valueOf((String)
+	 * studentData.get("gender")));
+	 * student.setUniversityName(UniversityNames.valueOf((String)
+	 * studentData.get("university_name"))); student.setYearOfJoin((Date)
+	 * studentData.get("year_of_join")); student.setPassOutYear((Date)
+	 * studentData.get("pass_out_year")); student.setPassword((String)
+	 * studentData.get("password")); student.setPhoneNumber((String)
+	 * studentData.get("phone_number")); student.setEmail((String)
+	 * studentData.get("email"));
+	 * student.setYearOfStudy(YearOfStudy.valueOf((String)
+	 * studentData.get("year_of_study"))); student.setBranch(Branch.valueOf((String)
+	 * studentData.get("branch"))); res.put("Status", true); res.put("Data",
+	 * student); return res; } else { res.put("Status", false); res.put("Message",
+	 * "UserNot Found"); return res; } } else { res.put("Status", false);
+	 * res.put("Message", "Invalid Credentials"); return res; } }
+	 */
+	public List fullData() {
+		List<Map<String, Object>> data = new ArrayList<>();
+		String sql = "select * from students";
+		data = jdbc.queryForList(sql);
+
+		List<Object> resultList = new ArrayList<>();
+		for (Map<String, Object> rowData : data) {
+			resultList.add(rowData);
+		}
+
+		return resultList;
+
+	}
+
+	public List StudentById(String studentId) {
+		List<Map<String, Object>> data = new ArrayList<>();
+		String sql = "select * from students where roll_number=?";
+		data = jdbc.queryForList(sql, studentId);
+
+		List<Object> resultList = new ArrayList<>();
+		for (Map<String, Object> rowData : data) {
+			resultList.add(rowData);
+		}
+
+		return resultList;
+
+	}
+
+	public int passwordUpdate(String studentId, String password) {
+		String updateQuery = "update students set password=? where roll_number=?";
+		int i = jdbc.update(updateQuery, password, studentId);
+		return i;
+	}
+
+}

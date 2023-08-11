@@ -1,0 +1,8 @@
+package com.example.model;
+
+public class LoginRequest {
+	
+	private String studentId;
+	private String password;
+
+}

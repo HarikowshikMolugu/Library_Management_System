@@ -1,0 +1,52 @@
+    <div class="total">
+    <div class="header">
+        <img src="https://png.pngtree.com/png-clipart/20200710/original/pngtree-books-logo-png-image_4136014.jpg" alt="Girl in a jacket"> 
+        <div class="header-right">
+          <a class="active" href="/signIn">Student</a>
+          <a href="/librarian">Librarian</a>
+        </div>
+      </div>
+<!-- <form [formGroup]="login">
+    <h2>Login Form</h2>
+        <label style="text-align: justify;">RollNumber:</label>
+        <input type="text" pInputText style="width: 268px;" formControlName="rollNumber">
+        <div class="card flex justify-content-center">
+            <label style="text-align: justify;">Password:</label>
+            <p-password [(ngModel)]="value" [toggleMask]="true" formControlName="password"></p-password>
+        </div>
+        <span *ngIf="error">{{ error }}</span><br><br>
+        <span *ngIf="isSuccess">User successfully Login</span><br><br>
+        <button  class="btn" type="submit" (click)="submit()">login</button><br><br>
+        <button (click)="passwordUpdate()">Forgot Password</button>
+        <p>Don't have an account? please <a href="/signUp">SignUp</a></p>
+        </form> -->
+         
+        <div id="card">
+            <div id="card-content">
+              <div id="card-title">
+                <h2>LOGIN</h2>
+                <div class="underline-title"></div>
+              </div>
+              <form method="post" class="form" [formGroup]="login"> 
+                <label for="user-email" style="padding-top:13px">
+                    &nbsp;Roll Number
+                  </label>
+                <input id="user-email" class="form-content" type="email" name="email" formControlName="studentId" autocomplete="on" required />
+                <div class="form-border"></div>
+                <label for="user-password" style="padding-top:22px">&nbsp;Password
+                  </label>
+                <input id="user-password" class="form-content" type="password" name="password" formControlName="password" required />
+                <!-- <p-password [toggleMask]="true"></p-password> -->
+
+                <div class="form-border"></div>
+                <a href="/password">
+                  <legend id="forgot-pass" >Forgot password?</legend>
+                </a>
+                <span>{{ error }}</span>
+                <input id="submit-btn" type="submit" (click)="submit()" name="submit"  value="LOGIN" />
+                <a href="/signUp" id="signup">Don't have account yet?</a>
+              </form>
+            </div>
+          </div>
+    </div>
+        <router-outlet></router-outlet>

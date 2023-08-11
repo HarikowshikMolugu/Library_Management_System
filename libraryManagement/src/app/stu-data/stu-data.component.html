@@ -1,0 +1,44 @@
+<div class="total">
+    <h2>STUDENT NAME: {{fullName}}</h2>
+    <form  [formGroup]="librarian">
+      <p-card header="" styleClass=""card>
+      <label for="book-search">Search for a book:</label>
+      <div class="search-wrapper">   
+                <input type="text" id="book-search" formControlName="bookName" name="book-search" placeholder="Enter book title or author name">
+                <button type="submit" (click)="searchBook()">Search</button>  
+                <button type="submit"  (click)="bookDet()">Book Details</button>              
+    </div>
+  </p-card>
+  <p-card header="" styleClass="card">
+    <div *ngFor="let book of result" id="libbook">
+        <div id="bookhead">
+            <p  id="bookname">BOOK NAME : {{book.book_name}}</p>
+          <p id="bookid" >ID : {{book.book_id}}</p>
+      
+        </div>
+        <div id="bookcontent">
+        <div style="width: 30%;margin-left: 10%;margin-right: 20%;">
+          <p>AUTHOR: {{book.book_author}}</p>
+          <p>EDITION: {{book.book_edition}}</p>
+          <p>STATUS: {{book.book_status}}</p>
+        </div>
+        <div>
+          <P>COST: {{book.book_cost}}</P>
+          <p>COUNT: {{book.available_count}}</p>
+        </div>
+        </div>
+        </div>
+  </p-card>
+  
+  
+    </form>
+  
+
+
+    
+  </div>
+
+
+  
+
+<router-outlet></router-outlet>

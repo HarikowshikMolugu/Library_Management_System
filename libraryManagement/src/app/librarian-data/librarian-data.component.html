@@ -1,0 +1,137 @@
+<div class="total">
+    <h2>Library Management System</h2>
+    <form  [formGroup]="librarian">
+      <p-card header="" styleClass=""card>
+      <label for="book-search">Search for a book:</label>
+      <div class="search-wrapper">   
+                <input type="text" id="book-search" formControlName="bookName" name="book-search" placeholder="Enter book title or author name">
+                <button type="submit" (click)="searchBook()">Search</button>                
+    </div>
+  </p-card>
+  <p-card header="" styleClass="card">
+    <div *ngFor="let book of result" id="libbook">
+    <div id="bookhead">
+        <p  id="bookname">BOOK NAME : {{book.book_name}}</p>
+      <p id="bookid" >ID : {{book.book_id}}</p>
+  
+    </div>
+    <div id="bookcontent">
+    <div style="width: 30%;margin-left: 10%;margin-right: 20%;">
+      <p>AUTHOR: {{book.book_author}}</p>
+      <p>EDITION: {{book.book_edition}}</p>
+      <p>STATUS: {{book.book_status}}</p>
+    </div>
+    <div>
+      <P>COST: {{book.book_cost}}</P>
+      <p>COUNT: {{book.available_count}}</p>
+    </div>
+    </div>
+    </div>
+  </p-card>
+  
+  
+    </form>
+  <br><br>
+    <form [formGroup]="searchStudent">
+      <p-card header="" styleClass=""card>
+      <label for="student-search">Search for a student:</label>
+      <div class="search-wrapper">
+        <input type="text" id="student-search" formControlName="studentId" name="student-search"  placeholder="Enter student name or ID" >
+        <button type="submit" (click)="studentStu()">Search</button> 
+        <!-- <button type="submit" (click)="studentStu()">Submit</button>  -->
+    </div>
+  </p-card>
+    </form><br><br>  
+  
+   
+  <div class="row">
+    <div class="col-md-12">
+        <table>
+            <thead>
+              <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Book Check In Date</th>
+                <th>Book Check Out Date</th>
+                <th>Book Return Date</th>
+                <th>Book Fine</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let book of bookData">
+                <td>{{ book.book_id }}</td>
+                <td>{{ book.book_name }}</td>
+                <td>{{ book.checkout_date }}</td>
+                <td>{{ book.dead_line }}</td>
+                <td>{{ book.return_date }}</td>
+                <td>{{ book.fine}}</td>
+               
+              </tr>
+            </tbody>
+          </table>
+          
+    </div>
+    </div>
+  <style>
+    .search-label {
+      display: block;
+      margin-bottom: 10px;
+    }
+  
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+    }
+  
+    .search-wrapper input {
+      margin-right: 10px;
+    }
+  </style>
+
+<form [formGroup]="borrowForm" >
+
+    <div>
+      <label for="studentId">Student Roll Number:</label>
+      <input type="text" id="studentId" formControlName="studentId">
+    </div>
+  
+    <div>
+      <label for="bookId">Book ID:</label>
+      <input type="text" id="bookId" formControlName="bookId">
+    </div>
+  
+    <button type="submit" (click)="bookBorrow()">Submit</button>
+  
+  </form>
+  
+  
+  <form [formGroup]="returnForm" >
+
+    <div>
+      <label for="studentId">Student Roll Number:</label>
+      <input type="text" id="studentId" formControlName="studentId">
+    </div>
+  
+    <div>
+      <label for="bookId">Book ID:</label>
+      <input type="text" id="bookId" formControlName="bookId">
+    </div>
+  
+    <button type="submit" (click)="bookReturn()">Submit</button>
+  
+  </form>
+  
+  
+</div>
+
+  
+  
+
+
+
+
+
+
+
+<router-outlet></router-outlet>

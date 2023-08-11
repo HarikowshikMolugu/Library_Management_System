@@ -1,0 +1,130 @@
+package com.example.model;
+
+import java.sql.Date;
+
+import com.example.enu.Branch;
+import com.example.enu.Gender;
+import com.example.enu.UniversityNames;
+import com.example.enu.YearOfStudy;
+
+public class Student {
+
+	private long id;
+	private String rollNumber;
+	private String firstName;
+	private String lastName;
+	private Gender gender;
+	private UniversityNames universityName;
+	private Date yearOfJoin;
+	private Date passOutYear;
+	private String password;
+	private String phoneNumber;
+	private String email;
+	private YearOfStudy yearOfStudy;
+	private Branch branch;
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getRollNumber() {
+		return rollNumber;
+	}
+
+	public void setRollNumber(String rollNumber) {
+		this.rollNumber = rollNumber;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public UniversityNames getUniversityName() {
+		return universityName;
+	}
+
+	public void setUniversityName(UniversityNames universityName) {
+		this.universityName = universityName;
+	}
+
+	public Date getYearOfJoin() {
+		return yearOfJoin;
+	}
+
+	public void setYearOfJoin(Date yearOfJoin) {
+		this.yearOfJoin = yearOfJoin;
+	}
+
+	public Date getPassOutYear() {
+		return passOutYear;
+	}
+
+	public void setPassOutYear(Date passOutYear) {
+		this.passOutYear = passOutYear;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public YearOfStudy getYearOfStudy() {
+		return yearOfStudy;
+	}
+
+	public void setYearOfStudy(YearOfStudy yearOfStudy) {
+		this.yearOfStudy = yearOfStudy;
+	}
+
+}
